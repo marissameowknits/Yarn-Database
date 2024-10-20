@@ -1,0 +1,66 @@
+-- Create table for yarn types
+CREATE TABLE yarn_inventory (
+    yarn_id INT PRIMARY KEY,
+    yarn_name VARCHAR(100) NOT NULL,
+    fiber_content VARCHAR(100),
+    yarn_weight VARCHAR(50),
+    yarn_brand VARCHAR(100),
+    available_quantity INT
+);
+
+-- Create table for patterns
+CREATE TABLE patterns (
+    pattern_id INT PRIMARY KEY,
+    pattern_name VARCHAR(100) NOT NULL,
+    difficulty_level VARCHAR(50),
+    recommended_yarn VARCHAR(100),
+    pattern_source TEXT
+);
+
+-- Create table for projects
+CREATE TABLE projects (
+    project_id INT PRIMARY KEY,
+    project_name VARCHAR(100) NOT NULL,
+    pattern_id INT,
+    project_status VARCHAR(50),
+    materials_needed TEXT,
+    start_date DATE,
+    end_date DATE,
+    FOREIGN KEY (pattern_id) REFERENCES patterns(pattern_id)
+);
+
+-- Create table to link projects with yarn
+CREATE TABLE project_yarn (
+    project_yarn_id INT PRIMARY KEY,
+    project_id INT,
+    yarn_id INT,
+    yarn_amount_used INT,
+    FOREIGN KEY (project_id) REFERENCES projects(project_id),
+    FOREIGN KEY (yarn_id) REFERENCES yarn_inventory(yarn_id)
+);
+
+-- Insert example data into yarn_inventory
+INSERT INTO yarn_inventory (yarn_id, yarn_name, fiber_content, yarn_weight, yarn_brand, available_quantity)
+VALUES (1, 'Superwash Merino Wool', '100% Merino Wool', 'DK', 'Brand A', 10),
+       (2, 'Cotton Yarn', '100% Cotton', 'Worsted', 'Brand B', 20);
+
+-- Insert example data into patterns
+INSERT INTO patterns (pattern_id, pattern_name, difficulty_level, recommended_yarn, pattern_source)
+VALUES (1, 'Scarf Pattern', 'Easy', 'Worsted', 'Pattern Book A'),
+       (2, 'Sweater Pattern', 'Intermediate', 'DK', 'Pattern Book B');
+
+-- Insert example data into projects
+INSERT INTO projects (project_id, project_name, pattern_id, project_status, materials_needed, start_date, end_date)
+VALUES (1, 'Scarf for Winter', 1, 'In Progress', '3 skeins of Worsted weight yarn', '2024-10-15', NULL),
+       (2, 'Summer Sweater', 2, 'Completed', '5 skeins of DK weight yarn', '2024-07-01', '2024-08-30');
+
+-- Insert example data into project_yarn
+INSERT INTO project_yarn (project_yarn_id, project_id, yarn_id, yarn_amount_used)
+VALUES (1, 1, 2, 3),
+       (2, 2, 1, 5);
+
+-- Select all data to ensure the tables are correctly populated
+SELECT * FROM yarn_inventory;
+SELECT * FROM patterns;
+SELECT * FROM projects;
+SELECT * FROM project_yarn;
